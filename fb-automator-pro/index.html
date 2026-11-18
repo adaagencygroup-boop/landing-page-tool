@@ -19,7 +19,8 @@
       property="og:description"
       content="Fanpage, nội dung AI, video Reels, hộp thư chung, quét dữ liệu và seeding — gom về một nền tảng."
     />
-    <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="assets/icons/favicon.png" type="image/png" sizes="64x64" />
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
 
     <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -48,7 +49,7 @@
       <div class="container header__inner">
         <a class="brand" href="#hero" aria-label="FB Automator Pro — trang chủ">
           <span class="brand__mark" aria-hidden="true">
-            <i data-lucide="zap"></i>
+            <img class="brand__logo" src="assets/images/logo.png" alt="" width="32" height="32" />
           </span>
           <span class="brand__text">FB Automator<sub>PRO</sub></span>
         </a>
@@ -213,7 +214,7 @@
                     <div>
                       <div class="app__title">Tổng quan</div>
                       <div class="app__subtitle">
-                        30 ngày gần nhất · 128 trang · 24 tài khoản
+                        30 ngày gần nhất · 128 trang · 317 tài khoản
                       </div>
                     </div>
                     <div class="app__head-actions" aria-hidden="true">
@@ -481,7 +482,7 @@
       <section class="strip" aria-label="Tổng quan nền tảng">
         <div class="container">
           <p class="strip__label" data-reveal>
-            Nền tảng nội bộ cho đội vận hành Fanpage ở quy mô lớn
+            Nền tảng vận hành Fanpage cho đội làm ở quy mô lớn
           </p>
           <div class="stats">
             <div class="stat" data-reveal style="--reveal-delay: 0ms">
@@ -525,7 +526,7 @@
 
           <div class="overview">
             <article class="card" data-reveal style="--reveal-delay: 0ms">
-              <span class="card__meta">01 — 04</span>
+              <!-- <span class="card__meta">01 — 04</span> -->
               <span class="card__icon" aria-hidden="true">
                 <i data-lucide="users-round"></i>
               </span>
@@ -542,7 +543,7 @@
             </article>
 
             <article class="card" data-reveal style="--reveal-delay: 90ms">
-              <span class="card__meta">05 — 06</span>
+              <!-- <span class="card__meta">05 — 06</span> -->
               <span class="card__icon" aria-hidden="true">
                 <i data-lucide="sparkles"></i>
               </span>
@@ -559,7 +560,7 @@
             </article>
 
             <article class="card" data-reveal style="--reveal-delay: 180ms">
-              <span class="card__meta">07 · 08 · 10 · 11</span>
+              <!-- <span class="card__meta">07 · 08 · 10 · 11</span> -->
               <span class="card__icon" aria-hidden="true">
                 <i data-lucide="radar"></i>
               </span>
@@ -572,6 +573,7 @@
                 <li><i data-lucide="check" aria-hidden="true"></i> Quét nhóm: thông tin, thành viên, bài viết</li>
                 <li><i data-lucide="check" aria-hidden="true"></i> Quét Page: người theo dõi, bài viết, liên hệ</li>
                 <li><i data-lucide="check" aria-hidden="true"></i> Seeding Page, trang cá nhân và bài viết</li>
+                <li><i data-lucide="check" aria-hidden="true"></i> Đăng bài và bình luận vào nhóm theo chiến dịch</li>
               </ul>
             </article>
           </div>
@@ -626,9 +628,6 @@
                     <span><strong>Tự tìm ảnh minh họa</strong> — tìm ảnh hợp nội dung và đính kèm sẵn trước khi đăng.</span>
                   </li>
                 </ul>
-                <a class="feature__link" href="#cta">
-                  Bắt đầu tạo nội dung <i data-lucide="arrow-right" aria-hidden="true"></i>
-                </a>
               </div>
 
               <div class="preview" data-reveal="right">
@@ -689,9 +688,6 @@
                     <span><strong>Chạy tiếp được</strong> — tắt giữa chừng rồi bật lại là tiếp đúng chỗ đang dở.</span>
                   </li>
                 </ul>
-                <a class="feature__link" href="#cta">
-                  Xem pipeline <i data-lucide="arrow-right" aria-hidden="true"></i>
-                </a>
               </div>
 
               <div class="preview preview--neutral" data-reveal="left">
@@ -764,13 +760,13 @@
                 </h3>
                 <p class="feature__text">
                   Tin nhắn và bình luận từ mọi trang đã kết nối đổ về cùng một
-                  danh sách, cập nhật ngay khi khách vừa nhắn. Trả lời kèm ảnh,
-                  gắn nhãn và đánh dấu đơn ngay trong cùng một màn hình.
+                  danh sách, thay vì mở từng Fanpage một. Trả lời kèm ảnh, gắn
+                  nhãn và đánh dấu đơn ngay trong cùng một màn hình.
                 </p>
                 <ul class="feature__list">
                   <li>
                     <span class="feature__check" aria-hidden="true"><i data-lucide="check"></i></span>
-                    <span><strong>Hiện ngay lập tức</strong> — khách vừa nhắn là thấy, không phải bấm tải lại.</span>
+                    <span><strong>Gom về một chỗ</strong> — mọi Fanpage đã kết nối chung một hộp thư, không phải chuyển qua lại từng trang.</span>
                   </li>
                   <li>
                     <span class="feature__check" aria-hidden="true"><i data-lucide="check"></i></span>
@@ -781,9 +777,6 @@
                     <span><strong>Không chỉ tin nhắn</strong> — trả lời và xử lý cả bình luận dưới bài viết.</span>
                   </li>
                 </ul>
-                <a class="feature__link" href="#cta">
-                  Mở hộp thư <i data-lucide="arrow-right" aria-hidden="true"></i>
-                </a>
               </div>
 
               <div class="preview preview--violet" data-reveal="right">
@@ -852,9 +845,6 @@
                     <span><strong>Tạm dừng và chạy tiếp</strong> — mỗi lượt quét đều ghi rõ đã tới đâu và vì sao dừng.</span>
                   </li>
                 </ul>
-                <a class="feature__link" href="#cta">
-                  Chạy thử một phiên quét <i data-lucide="arrow-right" aria-hidden="true"></i>
-                </a>
               </div>
 
               <div class="preview preview--neutral" data-reveal="left">
@@ -1045,8 +1035,10 @@
               <span class="adv__icon" aria-hidden="true"><i data-lucide="cpu"></i></span>
               <h3 class="adv__title">Chạy trên máy, dữ liệu dùng chung</h3>
               <p class="adv__text">
-                Phần mềm cài trên máy bạn, còn dữ liệu của cả đội nằm chung một
-                nơi. Mất mạng vẫn làm việc được, có mạng lại tự đồng bộ.
+                Phần mềm cài trên máy bạn, nên trình duyệt và đường mạng dùng để
+                chạy việc đều là của bạn. Dữ liệu của cả đội nằm chung một nơi,
+                ai mở máy nào cũng thấy đúng một trạng thái — không phải dựng
+                máy chủ, không phải chép file qua lại.
               </p>
             </article>
 
@@ -1136,8 +1128,11 @@
               <p class="plan__pitch">
                 Linh hoạt cho mùa cao điểm hoặc dự án ngắn.
               </p>
-              <a class="btn btn--secondary btn--block plan__cta" href="#cta">
-                Chọn gói này
+              <a class="btn btn--secondary btn--block plan__cta" href="https://zalo.me/0886291909"
+                 target="_blank" rel="noopener"
+                 data-zalo-buy data-plan="Gói 1 tháng" data-price="990.000đ">
+                <i data-lucide="message-circle" aria-hidden="true"></i>
+                Mua qua Zalo
               </a>
             </article>
 
@@ -1154,8 +1149,11 @@
               <p class="plan__pitch">
                 Đủ dài để một chiến dịch chạy trọn vòng đời.
               </p>
-              <a class="btn btn--secondary btn--block plan__cta" href="#cta">
-                Chọn gói này
+              <a class="btn btn--secondary btn--block plan__cta" href="https://zalo.me/0886291909"
+                 target="_blank" rel="noopener"
+                 data-zalo-buy data-plan="Gói 3 tháng" data-price="2.490.000đ">
+                <i data-lucide="message-circle" aria-hidden="true"></i>
+                Mua qua Zalo
               </a>
             </article>
 
@@ -1172,8 +1170,11 @@
               <p class="plan__pitch">
                 Lựa chọn quen thuộc của các đội chạy đều tay.
               </p>
-              <a class="btn btn--secondary btn--block plan__cta" href="#cta">
-                Chọn gói này
+              <a class="btn btn--secondary btn--block plan__cta" href="https://zalo.me/0886291909"
+                 target="_blank" rel="noopener"
+                 data-zalo-buy data-plan="Gói 6 tháng" data-price="4.590.000đ">
+                <i data-lucide="message-circle" aria-hidden="true"></i>
+                Mua qua Zalo
               </a>
             </article>
 
@@ -1191,11 +1192,73 @@
               <p class="plan__pitch">
                 Rẻ nhất tính theo tháng, kèm hỗ trợ ưu tiên.
               </p>
-              <a class="btn btn--primary btn--block plan__cta" href="#cta">
-                Chọn gói này
+              <a class="btn btn--primary btn--block plan__cta" href="https://zalo.me/0886291909"
+                 target="_blank" rel="noopener"
+                 data-zalo-buy data-plan="Gói 1 năm" data-price="8.490.000đ">
+                <i data-lucide="message-circle" aria-hidden="true"></i>
+                Mua qua Zalo
                 <i data-lucide="arrow-right" aria-hidden="true"></i>
               </a>
             </article>
+          </div>
+
+          <!-- Thanh toán: chốt đơn qua Zalo -->
+          <div class="paybox" data-reveal>
+            <div class="paybox__intro">
+              <span class="paybox__eyebrow">
+                <i data-lucide="wallet" aria-hidden="true"></i> Mua hàng &amp; thanh toán
+              </span>
+              <p class="paybox__title">Chốt gói qua Zalo, kích hoạt trong 5–10 phút</p>
+              <p class="paybox__text">
+                Chưa có cổng thanh toán tự động. Bạn nhắn Zalo, admin gửi số tài
+                khoản và mở bản quyền ngay sau khi nhận chuyển khoản.
+              </p>
+              <div class="btn-row paybox__actions">
+                <a class="btn btn--primary" href="https://zalo.me/0886291909"
+                   target="_blank" rel="noopener"
+                   data-zalo-buy data-plan="Bảng giá FB Automator Pro">
+                  <i data-lucide="message-circle" aria-hidden="true"></i>
+                  Nhắn Zalo 088 629 1909
+                </a>
+                <a class="btn btn--secondary" href="tel:+84886291909">
+                  <i data-lucide="phone-call" aria-hidden="true"></i>
+                  Gọi hotline
+                </a>
+              </div>
+            </div>
+
+            <ol class="paybox__steps">
+              <li class="paybox__step">
+                <span class="paybox__num">1</span>
+                <div class="paybox__body">
+                  <strong class="paybox__step-title">Nhắn Zalo chọn gói</strong>
+                  <span class="paybox__step-text">
+                    Bấm “Mua qua Zalo” ở gói bạn muốn — tin nhắn đã soạn sẵn,
+                    bạn chỉ cần dán vào khung chat và gửi.
+                  </span>
+                </div>
+              </li>
+              <li class="paybox__step">
+                <span class="paybox__num">2</span>
+                <div class="paybox__body">
+                  <strong class="paybox__step-title">Chuyển khoản</strong>
+                  <span class="paybox__step-text">
+                    Admin gửi số tài khoản ngân hàng kèm nội dung
+                    chuyển khoản. Cần hóa đơn VAT thì báo trước.
+                  </span>
+                </div>
+              </li>
+              <li class="paybox__step">
+                <span class="paybox__num">3</span>
+                <div class="paybox__body">
+                  <strong class="paybox__step-title">Nhận key kích hoạt</strong>
+                  <span class="paybox__step-text">
+                    Gửi lại mã máy trong phần mềm, bản quyền mở trong 5–10 phút
+                    giờ hành chính.
+                  </span>
+                </div>
+              </li>
+            </ol>
           </div>
 
           <!-- Những gì có sẵn trong mọi gói -->
@@ -1209,6 +1272,7 @@
               <li><i data-lucide="check" aria-hidden="true"></i> Hộp thư chung cho mọi Fanpage</li>
               <li><i data-lucide="check" aria-hidden="true"></i> Quét nhóm và quét Page</li>
               <li><i data-lucide="check" aria-hidden="true"></i> Seeding Page, trang cá nhân, bài viết</li>
+              <li><i data-lucide="check" aria-hidden="true"></i> Đăng bài và bình luận vào nhóm hội</li>
               <li><i data-lucide="check" aria-hidden="true"></i> Nuôi nick và luân phiên đường mạng</li>
               <li><i data-lucide="check" aria-hidden="true"></i> Bản cài cho Windows 10 và 11</li>
               <li><i data-lucide="check" aria-hidden="true"></i> Tự động cập nhật phiên bản mới</li>
@@ -1218,7 +1282,7 @@
           <p class="pricing__note" data-reveal>
             Mỗi tài khoản dùng trên máy đã đăng ký; đổi máy thì quản trị viên mở
             khóa lại giúp bạn. Cần nhiều máy hoặc phương án riêng?
-            <a href="#cta">Cho chúng tôi biết bạn đang vận hành thế nào.</a>
+            <a href="#contact">Cho chúng tôi biết bạn đang vận hành thế nào.</a>
           </p>
         </div>
       </section>
@@ -1227,10 +1291,14 @@
       <!-- ====================================================================
            TẢI ỨNG DỤNG
            ================================================================ -->
-      <!-- LINK TẢI VỀ: 2 thẻ <a data-download> bên dưới (nút chính + hàng trong
-           lịch sử) đang trỏ tới link tạm. Khi có bộ cài thật, thay href của cả hai
-           (bỏ luôn ?download=... nếu file nằm cùng tên miền, vì khi đó thuộc tính
-           download tự có hiệu lực). -->
+      <!-- LINK TẢI VỀ — TỰ CẬP NHẬT
+           Mục 14 trong js/main.js gọi GitHub Releases API rồi tự điền: số phiên
+           bản, dung lượng, ngày phát hành, link tải và cả lịch sử phiên bản.
+           Repo ra tag mới là trang hiện bản đó, không phải sửa file này.
+
+           Phần dưới đây là BẢN DỰ PHÒNG, chỉ hiện khi gọi API thất bại (mất mạng
+           hoặc bị GitHub giới hạn request). Nên cập nhật cho khớp khi ra bản mới,
+           nhưng không bắt buộc — JS sẽ ghi đè mỗi khi gọi được API. -->
       <section class="section download" id="download">
         <div class="container">
           <div class="section-head section-head--center">
@@ -1251,16 +1319,15 @@
             <div class="release" data-reveal="left">
               <div class="release__head">
                 <span class="release__label">Phiên bản hiện tại</span>
-                <span class="release__version">v2.0.12</span>
+                <span class="release__version" data-release-version>v2.0.16</span>
               </div>
-              <p class="release__specs">
-                Dung lượng ~18 MB · Windows 10 / 11 (64-bit) · Cài đặt trong một phút
+              <p class="release__specs" data-release-specs>
+                Dung lượng ~73 MB · Windows 10 / 11 (64-bit) · Cài đặt trong một phút
               </p>
               <a
                 class="btn btn--primary btn--lg btn--block release__cta"
-                href="https://utifkgtstdfomonrwslk.supabase.co/storage/v1/object/public/sacviet/avatars-TUs4ivmCkzLUN0Zf-ZbGD3g-t1080x1080.jpg?download=FB-Automator-Pro-v2.0.12.exe"
+                href="https://github.com/adaagencygroup-boop/fb-automator-core/releases/download/v2.0.16/FB_Page_Automator_2.0.16_x64-setup.exe"
                 data-download
-                download="FB-Automator-Pro-v2.0.12.exe"
               >
                 <i data-lucide="download" aria-hidden="true"></i>
                 Tải bộ cài (.EXE)
@@ -1279,42 +1346,41 @@
               </div>
             </div>
 
-            <!-- Lịch sử phiên bản — hiện mới có một bản.
-                 Khi ra bản mới, thêm một <li class="release-row"> lên đầu danh sách,
-                 chuyển thẻ "Mới nhất" sang hàng đó và bỏ khối .history__empty. -->
-            <div class="history" data-reveal="right">
+            <!-- Lịch sử phiên bản — js/main.js mục 14 dựng lại danh sách này từ
+                 GitHub Releases. Hàng dưới đây chỉ là bản dự phòng khi gọi API lỗi. -->
+            <div class="history" data-reveal="right" data-release-history>
               <div class="history__head">
                 <span class="history__title">Lịch sử phiên bản</span>
-                <span class="history__note">
+                <!-- <span class="history__note">
                   <i data-lucide="history" aria-hidden="true"></i> Tải lại bản cũ bất cứ lúc nào
-                </span>
+                </span> -->
               </div>
 
-              <ul class="history__list">
+              <ul class="history__list" data-release-list>
                 <li class="release-row">
                   <span class="release-row__main">
                     <span class="release-row__top">
-                      <span class="release-row__ver">v2.0.12</span>
+                      <span class="release-row__ver">v2.0.16</span>
                       <span class="badge badge--accent">Mới nhất</span>
-                      <span class="release-row__date">16/11/2026</span>
+                      <span class="release-row__date">18/11/2026</span>
                     </span>
-                    <span class="release-row__text">Bản phát hành đầu tiên</span>
+                    <span class="release-row__text">Bản cập nhật mới nhất · 73 MB</span>
                   </span>
                   <a
                     class="ui-btn release-row__btn"
-                    href="https://utifkgtstdfomonrwslk.supabase.co/storage/v1/object/public/sacviet/avatars-TUs4ivmCkzLUN0Zf-ZbGD3g-t1080x1080.jpg?download=FB-Automator-Pro-v2.0.12.exe"
+                    href="https://github.com/adaagencygroup-boop/fb-automator-core/releases/download/v2.0.16/FB_Page_Automator_2.0.16_x64-setup.exe"
                     data-download
-                    download="FB-Automator-Pro-v2.0.12.exe"
-                    aria-label="Tải bản v2.0.12"
+                    aria-label="Tải bản v2.0.16"
                   >
                     <i data-lucide="download" aria-hidden="true"></i> Tải về
                   </a>
                 </li>
               </ul>
 
-              <p class="history__empty">
+              <p class="history__empty" data-release-empty>
                 <i data-lucide="info" aria-hidden="true"></i>
-                Mới có bản đầu tiên. Các bản sau sẽ hiện ở đây để bạn tải lại khi cần.
+                Danh sách đầy đủ các bản phát hành có
+                <a href="https://github.com/adaagencygroup-boop/fb-automator-core/releases" target="_blank" rel="noopener">trên GitHub</a>.
               </p>
             </div>
           </div>
@@ -1400,11 +1466,12 @@
                 <div>
                   <p>
                     Cả hai. Phần mềm cài và chạy trên máy bạn, nên việc mở trình
-                    duyệt hay tải video đều dùng chính đường mạng của bạn. Còn dữ
-                    liệu làm việc — tài khoản, trang, tác vụ, lịch sử — để chung
-                    một nơi cho cả đội cùng nhìn thấy. Nếu bạn muốn chạy hoàn
-                    toàn nội bộ, hệ thống tự lưu dữ liệu ngay trên máy và vẫn
-                    hoạt động bình thường khi không có mạng.
+                    duyệt, tải video hay nuôi nick đều dùng chính đường mạng của
+                    bạn — không phải thuê máy chủ. Còn dữ liệu làm việc — tài
+                    khoản, trang, tác vụ, lịch sử — để chung một nơi cho cả đội
+                    cùng nhìn thấy. Vì dữ liệu dùng chung nên máy cần có mạng
+                    thì phần mềm mới chạy. Mạng chập chờn thì tác vụ dừng lại
+                    chứ không chạy sai, và bật lại là tiếp đúng chỗ đang dở.
                   </p>
                   <p class="faq__more">
                     <a href="huong-dan.html#cai-dat">
@@ -1672,7 +1739,7 @@
           <div class="footer__brand">
             <a class="brand" href="#hero" aria-label="FB Automator Pro — trang chủ">
               <span class="brand__mark" aria-hidden="true">
-                <i data-lucide="zap"></i>
+                <img class="brand__logo" src="assets/images/logo.png" alt="" width="32" height="32" />
               </span>
               <span class="brand__text">FB Automator<sub>PRO</sub></span>
             </a>

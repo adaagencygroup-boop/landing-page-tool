@@ -13,6 +13,9 @@
    09. Thanh tiến độ
    10. Accordion Hỏi đáp
    11. Hiệu ứng thị sai cho các thẻ nổi
+   12. Form liên hệ → Google Sheet
+   13. Mua gói qua Zalo (chép sẵn tin nhắn)
+   14. Danh sách bản phát hành — lấy từ GitHub Releases
    ========================================================================== */
 
 (function () {
@@ -532,6 +535,358 @@
         renderIcons();
       }
     });
+  }
+
+  /* ==========================================================================
+     13. MUA GÓI QUA ZALO
+
+     Link zalo.me không điền sẵn được nội dung tin nhắn, nên khi khách bấm
+     "Mua qua Zalo" ta chép sẵn câu hỏi mua hàng vào clipboard rồi báo họ dán
+     vào khung chat. Link vẫn mở bình thường kể cả khi chép thất bại.
+     ====================================================================== */
+  const zaloButtons = $$("[data-zalo-buy]");
+
+  if (zaloButtons.length) {
+    let toastEl = null;
+    let toastTimer = 0;
+
+    function showToast(message) {
+      if (!toastEl) {
+        toastEl = document.createElement("div");
+        toastEl.className = "toast";
+        toastEl.setAttribute("role", "status");
+        toastEl.innerHTML =
+          '<i data-lucide="clipboard-check" aria-hidden="true"></i><span></span>';
+        document.body.appendChild(toastEl);
+        renderIcons();
+      }
+
+      toastEl.querySelector("span").textContent = message;
+      toastEl.classList.add("is-visible");
+
+      window.clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(function () {
+        toastEl.classList.remove("is-visible");
+      }, 4200);
+    }
+
+    function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+      }
+
+      // Dự phòng cho trình duyệt cũ hoặc trang chạy qua http.
+      return new Promise(function (resolve, reject) {
+        const area = document.createElement("textarea");
+        area.value = text;
+        area.setAttribute("readonly", "");
+        area.style.position = "fixed";
+        area.style.opacity = "0";
+        document.body.appendChild(area);
+        area.select();
+        const ok = document.execCommand && document.execCommand("copy");
+        area.remove();
+        if (ok) resolve();
+        else reject(new Error("copy failed"));
+      });
+    }
+
+    zaloButtons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const plan = btn.dataset.plan || "";
+        const price = btn.dataset.price || "";
+
+        const message = price
+          ? "Chào shop, mình muốn mua " + plan + " (" + price + ") của FB Automator Pro."
+          : "Chào shop, mình muốn được tư vấn gói FB Automator Pro phù hợp.";
+
+        copyText(message)
+          .then(function () {
+            showToast("Đã chép sẵn tin nhắn — dán vào khung chat Zalo rồi gửi.");
+          })
+          .catch(function () {});
+      });
+    });
+  }
+
+  /* ==========================================================================
+     14. DANH SÁCH BẢN PHÁT HÀNH — LẤY TỪ GITHUB RELEASES
+
+     Trang là HTML tĩnh, không có build step, nên phần phiên bản được lấy ngay
+     trên trình duyệt từ GitHub Releases API. Repo ra tag mới là trang tự hiện
+     bản mới, không phải sửa HTML.
+
+     Vì sao gọi api.github.com chứ không đọc latest.json: chỉ api.github.com
+     trả header "Access-Control-Allow-Origin: *". Link tải trong phần
+     /releases/download/ KHÔNG có CORS nên fetch từ trang sẽ bị chặn.
+
+     Gọi không kèm token thì GitHub cho 60 request mỗi giờ cho mỗi địa chỉ IP,
+     nên kết quả được giữ trong sessionStorage 30 phút. Mọi lỗi đều bỏ qua êm:
+     khi đó HTML dự phòng trong index.html vẫn còn nguyên trên trang.
+     ====================================================================== */
+  const RELEASES = {
+    repo: "adaagencygroup-boop/fb-automator-core",
+    scrollAfter: 7, // quá số hàng này thì khung lịch sử cho cuộn trong chỗ
+    cacheMinutes: 30,
+    cacheKey: "fbap.releases.v1",
+  };
+
+  const releaseVersionEl = $("[data-release-version]");
+  const releaseSpecsEl = $("[data-release-specs]");
+  const releaseListEl = $("[data-release-list]");
+  const releaseEmptyEl = $("[data-release-empty]");
+  const downloadLinks = $$("[data-download]");
+
+  if (releaseListEl || releaseVersionEl) {
+    const GITHUB_API =
+      "https://api.github.com/repos/" + RELEASES.repo + "/releases?per_page=30";
+
+    /** Chặn mọi thứ lấy từ API khỏi chạy như HTML. */
+    function esc(text) {
+      return String(text == null ? "" : text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function viDate(iso) {
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return "";
+      const pad = function (n) {
+        return String(n).padStart(2, "0");
+      };
+      return pad(d.getDate()) + "/" + pad(d.getMonth() + 1) + "/" + d.getFullYear();
+    }
+
+    function sizeMB(bytes) {
+      if (!bytes) return "";
+      return Math.round(bytes / 1048576) + " MB";
+    }
+
+    /** Bộ cài Windows của một bản; bỏ qua .sig, latest.json, .deb, .AppImage. */
+    function windowsInstaller(release) {
+      const assets = release.assets || [];
+      const exes = assets.filter(function (a) {
+        const name = a.name || "";
+        return /\.exe$/i.test(name) && !/\.sig$/i.test(name);
+      });
+      if (!exes.length) return null;
+      // Ưu tiên bộ cài NSIS x64 nếu một bản có nhiều loại.
+      const preferred = exes.filter(function (a) {
+        return /x64[-_]setup\.exe$/i.test(a.name || "");
+      });
+      return preferred.length ? preferred[0] : exes[0];
+    }
+
+    /**
+     * Mô tả ngắn cho một bản.
+     * Release notes hiện do workflow sinh tự động bằng một đoạn tiếng Anh giống
+     * nhau ở mọi bản ("Desktop build from tag ..."), là chữ dành cho người lập
+     * trình. Gặp đoạn đó thì thay bằng câu trung tính tiếng Việt.
+     */
+    function describe(release, installer) {
+      const raw = String(release.body || "").trim();
+      const boilerplate =
+        !raw ||
+        /^desktop build from tag/i.test(raw) ||
+        /^desktop release/i.test(raw);
+
+      let text = "";
+      if (!boilerplate) {
+        text = raw
+          .replace(/\r/g, "")
+          .replace(/^#{1,6}\s+/gm, "") // bỏ dấu tiêu đề markdown
+          .replace(/[*_`>]/g, "") // bỏ ký hiệu nhấn mạnh
+          .replace(/^\s*[-+]\s+/gm, "· ") // gạch đầu dòng thành dấu ·
+          .split("\n")
+          .map(function (line) {
+            return line.trim();
+          })
+          .filter(Boolean)
+          .join(" ")
+          .trim();
+        if (text.length > 160) text = text.slice(0, 157).trimEnd() + "…";
+      }
+
+      if (!text) text = "Bản cập nhật định kỳ";
+      const mb = installer ? sizeMB(installer.size) : "";
+      return mb ? text + " · " + mb : text;
+    }
+
+    function rowHTML(release, installer, isLatest) {
+      const ver = esc(release.tag_name || "");
+      const top = [
+        '<span class="release-row__ver">' + ver + "</span>",
+        isLatest ? '<span class="badge badge--accent">Mới nhất</span>' : "",
+        '<span class="release-row__date">' +
+          esc(viDate(release.published_at || release.created_at)) +
+          "</span>",
+      ].join("");
+
+      return (
+        '<li class="release-row">' +
+        '<span class="release-row__main">' +
+        '<span class="release-row__top">' +
+        top +
+        "</span>" +
+        '<span class="release-row__text">' +
+        esc(describe(release, installer)) +
+        "</span>" +
+        "</span>" +
+        '<a class="ui-btn release-row__btn" href="' +
+        esc(installer.browser_download_url) +
+        '" data-download aria-label="Tải bản ' +
+        ver +
+        '">' +
+        '<i data-lucide="download" aria-hidden="true"></i> Tải về' +
+        "</a>" +
+        "</li>"
+      );
+    }
+
+    function render(releases) {
+      // Chỉ nhận bản đã phát hành thật và có bộ cài Windows kèm theo.
+      const usable = releases
+        .filter(function (r) {
+          return r && !r.draft && !r.prerelease;
+        })
+        .map(function (r) {
+          return { release: r, installer: windowsInstaller(r) };
+        })
+        .filter(function (item) {
+          return item.installer;
+        })
+        .sort(function (a, b) {
+          return (
+            new Date(b.release.published_at || b.release.created_at) -
+            new Date(a.release.published_at || a.release.created_at)
+          );
+        });
+
+      if (!usable.length) return;
+
+      const newest = usable[0];
+      const newestDay = viDate(
+        newest.release.published_at || newest.release.created_at
+      );
+
+      // --- Thẻ "Phiên bản hiện tại" ---
+      if (releaseVersionEl) {
+        releaseVersionEl.textContent = newest.release.tag_name || "";
+      }
+
+      if (releaseSpecsEl) {
+        const bits = [
+          "Dung lượng " + sizeMB(newest.installer.size),
+          "Windows 10 / 11 (64-bit)",
+        ];
+        if (newestDay) bits.push("Phát hành " + newestDay);
+        releaseSpecsEl.textContent = bits.join(" · ");
+      }
+
+      // Nút tải chính trong thẻ. Nút trong từng hàng được dựng lại bên dưới.
+      downloadLinks.forEach(function (link) {
+        if (link.closest(".release-row")) return;
+        link.href = newest.installer.browser_download_url;
+        // Tên file đổi theo từng bản — để GitHub tự đặt qua Content-Disposition.
+        link.removeAttribute("download");
+      });
+
+      // --- Lịch sử phiên bản: hiện đủ mọi bản, không cắt bớt ---
+      if (releaseListEl) {
+        releaseListEl.innerHTML = usable
+          .map(function (item, i) {
+            return rowHTML(item.release, item.installer, i === 0);
+          })
+          .join("");
+
+        // Danh sách dài thì cho cuộn trong khung, để cột này không kéo cả
+        // khu tải về dài ra. Mọi bản vẫn nằm trên trang, không phải đi đâu.
+        releaseListEl.classList.toggle(
+          "history__list--scroll",
+          usable.length > RELEASES.scrollAfter
+        );
+
+        // Khối gợi ý chỉ để lấp chỗ trống khi danh sách còn ngắn.
+        if (releaseEmptyEl) releaseEmptyEl.remove();
+      }
+
+      renderIcons();
+    }
+
+    /* --- Bộ nhớ tạm trong phiên, tránh đụng hạn mức 60 request/giờ --- */
+    function readCache() {
+      try {
+        const hit = JSON.parse(
+          window.sessionStorage.getItem(RELEASES.cacheKey)
+        );
+        if (!hit || !Array.isArray(hit.data)) return null;
+        if (Date.now() - (hit.at || 0) > RELEASES.cacheMinutes * 60000) {
+          return null;
+        }
+        return hit.data;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function writeCache(data) {
+      try {
+        window.sessionStorage.setItem(
+          RELEASES.cacheKey,
+          JSON.stringify({ at: Date.now(), data: data })
+        );
+      } catch (e) {
+        /* chế độ ẩn danh hoặc hết dung lượng — bỏ qua */
+      }
+    }
+
+    /** Giữ đúng mấy trường cần dùng, cho bộ nhớ tạm gọn. */
+    function slimDown(data) {
+      return data.map(function (r) {
+        return {
+          tag_name: r.tag_name,
+          body: r.body,
+          draft: r.draft,
+          prerelease: r.prerelease,
+          published_at: r.published_at,
+          created_at: r.created_at,
+          assets: (r.assets || []).map(function (a) {
+            return {
+              name: a.name,
+              size: a.size,
+              browser_download_url: a.browser_download_url,
+            };
+          }),
+        };
+      });
+    }
+
+    const cachedReleases = readCache();
+
+    if (cachedReleases) {
+      render(cachedReleases);
+    } else if (typeof window.fetch === "function") {
+      window
+        .fetch(GITHUB_API, {
+          headers: { Accept: "application/vnd.github+json" },
+        })
+        .then(function (res) {
+          if (!res.ok) throw new Error("GitHub API " + res.status);
+          return res.json();
+        })
+        .then(function (data) {
+          if (!Array.isArray(data) || !data.length) return;
+          const slim = slimDown(data);
+          writeCache(slim);
+          render(slim);
+        })
+        .catch(function () {
+          /* Giữ nguyên HTML dự phòng đang có trên trang. */
+        });
+    }
   }
 
   /* ==========================================================================

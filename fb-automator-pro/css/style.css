@@ -662,18 +662,19 @@ button {
   width: 32px;
   height: 32px;
   border-radius: 9px;
-  background: var(--g-accent);
   display: grid;
   place-items: center;
-  color: #fff;
   box-shadow: 0 4px 12px -4px rgba(47, 85, 255, 0.6);
   flex: none;
 }
 
-.brand__mark [data-lucide] {
-  width: 17px;
-  height: 17px;
-  stroke-width: 2.25;
+/* Logo đã có sẵn khối bo tròn màu xanh nên thẻ bọc không vẽ nền nữa. */
+.brand__logo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  border-radius: inherit;
 }
 
 .brand__text {
@@ -2493,8 +2494,10 @@ button {
   margin-top: auto;
 }
 
-.plans--5 .plan__pitch + .plan__cta {
-  padding-top: var(--s-5);
+/* Khoảng cách trước nút đặt ở lề của đoạn mô tả, không đặt vào padding của
+   nút — nếu không nút sẽ bị dày trên mỏng dưới. */
+.plans--5 .plan__pitch {
+  margin-bottom: var(--s-5);
 }
 
 .plan__save {
@@ -2515,6 +2518,150 @@ button {
 
 .plan--trial .plan__amount {
   color: var(--c-success);
+}
+
+/* --- Quy trình mua & thanh toán qua Zalo --- */
+.paybox {
+  margin-top: var(--s-8);
+  padding: var(--s-5);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--c-accent-border);
+  background: linear-gradient(180deg, var(--c-accent-softer) 0%, var(--c-surface) 46%);
+  display: grid;
+  gap: var(--s-5);
+  box-shadow: var(--sh-xs);
+}
+
+.paybox__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+
+.paybox__eyebrow [data-lucide] {
+  width: 14px;
+  height: 14px;
+}
+
+.paybox__title {
+  margin-top: 0.5rem;
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-semibold);
+  letter-spacing: -0.016em;
+}
+
+.paybox__text {
+  margin-top: 0.375rem;
+  font-size: var(--fs-xs);
+  color: var(--c-text-2);
+  line-height: 1.6;
+  max-width: 38ch;
+}
+
+.paybox__actions {
+  margin-top: var(--s-4);
+}
+
+.paybox__steps {
+  display: grid;
+  gap: var(--s-3);
+  counter-reset: none;
+  list-style: none;
+}
+
+.paybox__step {
+  display: flex;
+  gap: 0.75rem;
+  padding: var(--s-4);
+  border-radius: var(--r-md);
+  border: 1px solid var(--c-border);
+  background: var(--c-surface);
+}
+
+.paybox__num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--c-accent);
+  color: #fff;
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  flex: none;
+}
+
+.paybox__body {
+  display: grid;
+  gap: 2px;
+}
+
+.paybox__step-title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: -0.01em;
+}
+
+.paybox__step-text {
+  font-size: var(--fs-xs);
+  color: var(--c-text-2);
+  line-height: 1.55;
+}
+
+@media (min-width: 860px) {
+  .paybox {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: start;
+    gap: var(--s-6);
+    padding: var(--s-6);
+  }
+}
+
+/* --- Thông báo nổi khi chép sẵn tin nhắn Zalo --- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  z-index: 120;
+  transform: translate(-50%, 1rem);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: min(92vw, 30rem);
+  padding: 0.75rem 1rem;
+  border-radius: var(--r-pill);
+  background: var(--c-ink);
+  color: #fff;
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+  box-shadow: var(--sh-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t-base) var(--e-out),
+    transform var(--t-base) var(--e-out);
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.toast [data-lucide] {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+/* Màn hẹp: đẩy toast lên trên nút Zalo nổi cho khỏi che nhau. */
+@media (max-width: 640px) {
+  .toast {
+    bottom: 5.5rem;
+  }
 }
 
 /* --- Danh sách tính năng dùng chung cho mọi gói --- */
@@ -2728,6 +2875,37 @@ button {
   display: grid;
   gap: var(--s-2);
   margin-top: var(--s-4);
+}
+
+/* Mọi bản phát hành đều nằm trong danh sách này; js/main.js gắn thêm --scroll
+   khi số bản nhiều.
+
+   Chỉ cho cuộn từ 48rem trở lên — đúng chỗ .download__grid tách thành hai cột,
+   nên cần ghìm chiều cao để cột lịch sử không kéo dài hơn thẻ bên trái. Dưới
+   48rem chỉ còn một cột, không có gì để cân, nên cứ hiện thẳng cả danh sách:
+   một khung cuộn nhỏ nằm giữa trang dài rất khó vuốt trên điện thoại. */
+@media (min-width: 48rem) {
+  .history__list--scroll {
+    max-height: 23rem;
+    overflow-y: auto;
+    align-content: start; /* giữ các hàng dính lên trên khi lưới cao hơn nội dung */
+    padding-right: var(--s-2);
+    scrollbar-width: thin;
+    scrollbar-color: var(--c-border) transparent;
+  }
+
+  .history__list--scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .history__list--scroll::-webkit-scrollbar-thumb {
+    background: var(--c-border);
+    border-radius: 999px;
+  }
+
+  .history__list--scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
 }
 
 /* Khối gợi ý lấp phần còn trống khi danh sách mới có một bản. Bỏ đi khi
